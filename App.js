@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Button, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, Image, Button, TouchableOpacity, Animated, TextInput } from 'react-native';
 import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
 import Icon from 'react-native-vector-icons/Feather'
 
 const CopilotText = walkthroughable(Text);
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableImage = walkthroughable(Image);
-
 
 const StepNumberComponent = ({
   isFirstStep,
@@ -66,13 +65,13 @@ const TooltipComponent = ({
       </View>
     </View>
   );
-
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       secondStepActive: true,
+      input: ''
     };
   }
 
@@ -83,11 +82,20 @@ class App extends Component {
 
   handleStepChange = (step) => {
     console.log(`Current step is: ${step.name}`);
+    console.log(step)
   }
 
   render() {
-
-
+    const CustomComponent = ({ copilot, value }) => (
+      <View {...copilot} style={{ height: 50, width: '95%', backgroundColor: '#cecece' }}>
+        <TextInput
+          placeholder={'Teste'}
+          value={value}
+          onChangeText={value => this.setState({ input: value })}
+          ref={ref => { this._inputElement = ref }}
+        />
+      </View>
+    );
 
     return (
       <View style={{
@@ -110,10 +118,20 @@ class App extends Component {
             {'Welcome to the demo of\n"React Native Copilot"'}
           </WalkthroughableText>
         </CopilotStep>
+
+        <CopilotStep
+          text="This is a input example!"
+          order={2}
+          name="input"
+          ref={ref => { this._copilotInput = ref }}
+        >
+          <CustomComponent value={this.state.input} />
+        </CopilotStep>
+
         <CopilotStep
           active={this.state.secondStepActive}
           text="This is a image example!"
-          order={2}
+          order={3}
           name="Image"
         >
           <WalkthroughableImage source={require('./src/perfil.png')} style={{ width: 140, height: 140 }} />
@@ -128,7 +146,7 @@ class App extends Component {
         }}>
           <CopilotStep
             text="This is a icon1 example!"
-            order={3}
+            order={4}
             name="Icon1"
           >
             <WalkthroughableText style={{
@@ -141,7 +159,7 @@ class App extends Component {
           </CopilotStep>
           <CopilotStep
             text="This is a icon2 example!"
-            order={4}
+            order={5}
             name="Icon2"
           >
             <WalkthroughableText style={{
@@ -155,7 +173,7 @@ class App extends Component {
 
           <CopilotStep
             text="This is a Icon3 example!"
-            order={5}
+            order={6}
             name="Icon3"
           >
             <WalkthroughableText style={{
